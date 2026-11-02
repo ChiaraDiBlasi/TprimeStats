@@ -31,7 +31,7 @@
 
     "processes"     : { 
                         "backgrounds": ["TT", "TW", "ZJets", "WJets", "QCD"],
-                        "signals": ["TprimeToTZ_700", "TprimeToTZ_800", "TprimeToTZ_900", "TprimeToTZ_1000", "TprimeToTZ_1100", "TprimeToTZ_1200", "TprimeToTZ_1300", "TprimeToTZ_1400", "TprimeToTZ_1500", "TprimeToTZ_1600", "TprimeToTZ_1700", "TprimeToTZ_1800", "TprimeToTZ_1900", "TprimeToTZ_2000", "TprimeToTZ_2200", "TprimeToTZ_2400"]
+                        "signals": ["TprimeToTZ_700", "TprimeToTZ_800", "TprimeToTZ_900", "TprimeToTZ_1000", "TprimeToTZ_1100", "TprimeToTZ_1200", "TprimeToTZ_1300", "TprimeToTZ_1400", "TprimeToTZ_1500", "TprimeToTZ_1600", "TprimeToTZ_1700", "TprimeToTZ_1800", "TprimeToTZ_1900", "TprimeToTZ_2000", "TprimeToTZ_2200", "TprimeToTZ_2400", "TprimeToTZ_2600"]
                         },
 
     "samples"       : {
@@ -56,7 +56,8 @@
                         "TprimeToTZ_1900"   : "TprimeToTZ_1900",
                         "TprimeToTZ_2000"   : "TprimeToTZ_2000",
                         "TprimeToTZ_2200"   : "TprimeToTZ_2200",
-                        "TprimeToTZ_2400"   : "TprimeToTZ_2400"
+                        "TprimeToTZ_2400"   : "TprimeToTZ_2400",
+                        "TprimeToTZ_2600"   : "TprimeToTZ_2600"
                         },
 
     "categories"    : [
