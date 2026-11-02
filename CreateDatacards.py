@@ -12,7 +12,8 @@ parser.add_option('-u', '--unblind',            dest='unblind',         action='
 # parser.add_option('-s', '--singledatacards',    dest='singledatacards', action='store_true',    default=False,              help='Write single datacards per each bin')
 parser.add_option('--addSyst',                  dest='addSyst',         action='store_true',    default=False,              help='add Systematics in the datacards')
 parser.add_option('--addMCStat',                dest='addMCStat',       action='store_true',    default=False,              help='add auto MC Stat in the datacards')
-parser.add_option('--suffix',                   dest='suffix',          type=str,               default=None,               help='suffix to add to histo.root file name (e.g. histo2022_<suffix>.root)')
+parser.add_option('-s','--suffix',                   dest='suffix',          type=str,               default=None,               help='suffix to add to histo.root file name (e.g. histo2022_<suffix>.root)')
+parser.add_option('-v', '--variant',       type=str,               default='',                 help='Suffix labelling the variant at datacard level)')
 
 (opt, args)     = parser.parse_args()
 # Open JSON file
@@ -23,17 +24,20 @@ with open(opt.jsonInput) as file:
 
 era             = opt.era
 unblind         = opt.unblind
-suffix          = opt.suffix if opt.suffix is not None else ""
+suffix          = opt.suffix  if opt.suffix is not None else ""
+variant         = opt.variant if opt.variant is not None else ""
+suffix_dc       = "_".join(s for s in [suffix, variant ] if s)   # suffix for the datacard-level variation
 outFolderPath   = jsoninput["dc-folder"][era]
 
 def writeSingleDatacards():
     return 0
 
-def writeTotalDatacard(jsoninput, era, unblind, sig, suffix=""):
+def writeTotalDatacard(jsoninput, era, unblind, sig, suffix="", suffix_dc=""):
     cb = ch.CombineHarvester()
     cb.SetVerbosity(3)
 
     cats = [(i, cat) for i, (cat, useRealData) in enumerate(jsoninput["categories"])]
+    print("categories are : " ,cats)
     backgrounds = jsoninput["processes"]["backgrounds"]
     # signals = jsoninput["processes"]["signals"]
     signals = [sig]
@@ -79,7 +83,8 @@ def writeTotalDatacard(jsoninput, era, unblind, sig, suffix=""):
                         "hist_$PROCESS_$BIN_nominal","") # nominal isto saved in histo2022.root as hist_"sample"_"region"
 
     cb.PrintAll()
-    sigFolderPath = f"{outFolderPath}/{sig}{f'_{suffix}' if suffix else ''}"
+    sigFolderPath = f"{outFolderPath}/{sig}{f'_{suffix_dc}' if suffix else ''}"
+    print(sigFolderPath)
     if not os.path.exists(sigFolderPath):
         os.makedirs(sigFolderPath)
     cb.WriteDatacard(f"{sigFolderPath}/{sig}.txt", f"{sigFolderPath}/{sig}.root")
@@ -90,12 +95,13 @@ def writeTotalDatacard(jsoninput, era, unblind, sig, suffix=""):
                 "signal": sig,
                 "categories": [cat for cat, _ in jsoninput["categories"]],
                 "shape_input": inputShapePath,
-                "suffix": suffix,
+                "suffix": suffix_dc,
             },
             metadataFile,
             indent=2,
             sort_keys=True,
         )
+    print(f"{sigFolderPath}/datacard_metadata.json")
     if opt.addMCStat:
         with open(f"{sigFolderPath}/{sig}.txt", "a") as f:
             f.write("* autoMCStats 0 0 1\n")
@@ -117,4 +123,4 @@ if __name__ == "__main__":
     print(jsoninput["processes"]["signals"])
     for sig in jsoninput["processes"]["signals"]:
         print(sig)
-        writeTotalDatacard(jsoninput, era, unblind, sig, suffix)
+        writeTotalDatacard(jsoninput, era, unblind, sig, suffix=suffix, suffix_dc=suffix_dc)

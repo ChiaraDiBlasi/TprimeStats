@@ -13,6 +13,8 @@ parser.add_argument("--addSyst",                action="store_true",            
 parser.add_argument("-s", "--suffix",           default="",                     help="Suffix for the output file name (e.g. histo2023_<suffix>.root)")
 opt = parser.parse_args()
 
+dorebin=False
+
 def SampleFiles(sample, era):
     from samples import sample_dict
     d = sample_dict[f"{sample}_{era}"]
@@ -69,12 +71,13 @@ def CollectHistos(inputEosFolder, outFolderPath, jsonInput, era, unblind=False, 
                 summaryInfo[outputName]         = (region, outputSyst, process)
                 for i, f in enumerate(processFileList):
                     inputFile                   = ROOT.TFile.Open(f"{inputEosFolder}/{f}")
+                    print(process, region, inputName, f)
                     tmp                         = inputFile.Get(inputName)
                     tmp                         = tmp.Clone(f"{outputName}_source{i}")
                     tmp.SetDirectory(0)
                     inputFile.Close()
                     tmp.Scale(lumi)
-                    tmp                         = tmp.Rebin(len(xbins)-1, f"{outputName}_rebin{i}", xbins)
+                    if(dorebin):tmp                         = tmp.Rebin(len(xbins)-1, f"{outputName}_rebin{i}", xbins)
                     tmp.SetDirectory(0)
                     componentIntegrals[outputName].append((f, tmp.Integral()))
                     
@@ -109,7 +112,7 @@ def CollectHistos(inputEosFolder, outFolderPath, jsonInput, era, unblind=False, 
                 tmp = tmp.Clone(f"{outputName}_source{i}")
                 tmp.SetDirectory(0)
                 input.Close()
-                tmp = tmp.Rebin(len(xbins)-1, f"{outputName}_rebin{i}", xbins)
+                if(dorebin):tmp = tmp.Rebin(len(xbins)-1, f"{outputName}_rebin{i}", xbins)
                 tmp.SetDirectory(0)
                 componentIntegrals[outputName].append((f, tmp.Integral()))
                 if h_out is None: h_out = tmp.Clone(outputName); h_out.SetDirectory(0)

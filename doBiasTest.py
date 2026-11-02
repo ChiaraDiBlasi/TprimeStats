@@ -17,6 +17,8 @@ parser.add_argument("-m", "--massPoint",                dest="massPoint",       
 parser.add_argument("-t", "--toys",                     dest="toys",                    type=int,           default=1000,                   help="Number of toys")
 parser.add_argument("-s", "--seed",                     dest="seed",                    type=int,           default=123456,                 help="Random seed")
 parser.add_argument(      "--suffix",                 dest="suffix",                                      default="",                     help="Suffix of the datacard folder (e.g. TprimeToTZ_700_<suffix>)")
+parser.add_argument('--sigpath',        dest='sigpath',         type=str,   default = '',                                   help='Input the signal path as an argument rather than deriving it here')
+parser.add_argument('--signal',        dest='signal',         type=str,   default = '',                                   help='Input the signal as well')
 args   = parser.parse_args()
 
 with open(args.jsonInput) as file:
@@ -29,12 +31,16 @@ toys            = args.toys
 seed            = args.seed
 extraFitOptions = ""
 lumi            = jsoninput["lumi_dict"][era]
+signal          = f"TprimeToTZ_{mass}" if args.signal =='' else args.signal  
+dc_folder       = jsoninput["dc-folder"][era]
+sig_folder      = f"{dc_folder}/{signal}{f'_{opt.suffix}' if opt.suffix else ''}" if args.sigpath=='' else args.sigpath 
 
 
 
-def read_combineOutput(mass=700):
-    dc_folder       = f'{jsoninput["dc-folder"][era]}/TprimeToTZ_{mass}{f"_{args.suffix}" if args.suffix else ""}/'
-    subprocess.run(f"combine -M AsymptoticLimits -d {dc_folder}/TprimeToTZ_{mass}.txt > out.log", shell=True, check=True, cwd=dc_folder)
+def read_combineOutput(sig_folder,signal_loc,mass=700):
+    dc_folder=sig_folder
+    sig_loc=signal_loc
+    subprocess.run(f"combine -M AsymptoticLimits -d {dc_folder}/{sig_loc}.txt > out.log", shell=True, check=True, cwd=dc_folder)
     r_dict          = {
                         "expected_2p5":  None,
                         "expected_16p0": None,
@@ -63,7 +69,7 @@ def read_combineOutput(mass=700):
 
 
 print(f"Performing bias test for mass {mass} GeV")
-r_dict              = read_combineOutput(mass)
+r_dict              = read_combineOutput(sig_folder=sig_folder,signal_loc=signal,mass=mass)
 r_dict['BOnly']     = 0
 r_dict['rNominal']  = 1
 print(f"Results for mass {mass} GeV:")
@@ -74,11 +80,13 @@ print(f"    rExpected 50%:      {r_dict['expected_50p0']}")
 print(f"    rExpected 84%:      {r_dict['expected_84p0']}")
 
 
-bias_dir = f"{jsoninput['dc-folder'][era]}/TprimeToTZ_{mass}{f'_{args.suffix}' if args.suffix else ''}/bias/"
+#bias_dir = f"{jsoninput['dc-folder'][era]}/TprimeToTZ_{mass}{f'_{args.suffix}' if args.suffix else ''}/bias/"
+bias_dir = f"{sig_folder}/bias/"
 if not os.path.exists(bias_dir):
     os.makedirs(bias_dir)
 
-subprocess.run(f"text2workspace.py ../TprimeToTZ_{mass}.txt -m 125 -o workspace_TprimeToTZ_{mass}.root", shell=True, check=True, cwd=bias_dir)
+    subprocess.run(f"text2workspace.py ../{signal}.txt -m 125 -o workspace_{signal}.root", shell=True, check=True, cwd=bias_dir)
+
 for key, injected_signal in r_dict.items():
     bias_subdir     = f"{bias_dir}/{key}/"
     plot_name       = f"pulls_{key}_r{injected_signal}_{mass}"
@@ -87,8 +95,8 @@ for key, injected_signal in r_dict.items():
     genOptions      = f"--saveToys --toysFrequentist --bypassFrequentistFit -t {toys} -s {seed} --expectSignal {injected_signal} --rMin -250 --rMax 250"
     fitOptions      = f"--skipBOnlyFit --rMin -250 --rMax 250 -t {toys} -s {seed} --toysFile higgsCombine.{key}_r{injected_signal}_M{mass}.GenerateOnly.mH125.{seed}.root {extraFitOptions}"
 
-    genCommand      = f"combine -M GenerateOnly -d ../workspace_TprimeToTZ_{mass}.root -m 125 {genOptions} -n .{key}_r{injected_signal}_M{mass}"
-    fitCommand      = f"combine -M FitDiagnostics -d ../workspace_TprimeToTZ_{mass}.root -m 125 {fitOptions} -n .{key}_r{injected_signal}_M{mass}"
+    genCommand      = f"combine -M GenerateOnly -d ../workspace_{signal}.root -m 125 {genOptions} -n .{key}_r{injected_signal}_M{mass}"
+    fitCommand      = f"combine -M FitDiagnostics -d ../workspace_{signal}.root -m 125 {fitOptions} -n .{key}_r{injected_signal}_M{mass}"
     # print(f"Running: {genCommand}")
     # print(f"Running: {fitCommand}")
     subprocess.run(genCommand, shell=True, check=True, cwd=bias_subdir)

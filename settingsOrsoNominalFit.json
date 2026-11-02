@@ -1,0 +1,172 @@
+{
+    "variable"      : "PuppiMET_T1_pt_nominal",
+    
+    "plots-folder"  : {
+                        "2022"          : "",
+                        "2022EE"        : "",
+                        "2023"          : "/eos/user/o/oiorio/tDM/MergedSyst/plots/",
+                        "2023postBPix"  : "",
+                        "2024"          :  "/eos/user/o/oiorio/tDM/MergedSyst/plots/"
+                        },
+                        
+    "dc-folder"     : {
+                        "2022"              : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2022/",
+                        "2022EE"            : "",
+                        "2023"              : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2023/AHTight_SRTopLoose_AH0lZR_AH1lWR/",
+                        "2023postBPix"      : "",
+                        "2024"              : "/eos/user/o/oiorio/tDM/stats/2024/",
+                        "2022+2023"         : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2022+2023/",
+                        "2023+2024"         : "",
+                        "2022+2023+2024"    : ""
+                        },
+    
+    "lumi_dict"     : {
+                        "2022":           7.99,
+                        "2022EE":         26.68,
+                        "2023":           17.96,
+                        "2023postBPix":   9.68,
+                        "2024":           109.82
+                        },
+
+    "processes"     : { 
+        "backgrounds": ["TT", "TW", "ZJets","QCD"],
+        "signals": ["TBDM_s_mPhi10_mChi1","TBDM_s_mPhi50_mChi1","TBDM_s_mPhi200_mChi1","TBDM_s_mPhi300_mChi1","TBDM_s_mPhi500_mChi1","TBDM_s_mPhi1000_mChi1"]
+                        },
+
+    "samples"       : {
+                        "Data"              : "DataJetMET",
+                        "TT"                : "TT",
+                        "TW"                : "TW",
+                        "ZJets"             : "ZJetsToNuNu_2jets",
+                        "QCD"               : "QCD",
+        "TBDM_s_mPhi10_mChi1"   : "TBDM_s_mPhi10_mChi1",
+	"TBDM_s_mPhi50_mChi1"   : "TBDM_s_mPhi50_mChi1",
+	"TBDM_s_mPhi100_mChi1"   : "TBDM_s_mPhi100_mChi1",
+	"TBDM_s_mPhi200_mChi1"   : "TBDM_s_mPhi200_mChi1",
+	"TBDM_s_mPhi300_mChi1"   : "TBDM_s_mPhi300_mChi1",
+	"TBDM_s_mPhi500_mChi1"   : "TBDM_s_mPhi500_mChi1",
+	"TBDM_s_mPhi1000_mChi1"   : "TBDM_s_mPhi1000_mChi1"
+                        },
+
+    "categories"    : [
+	["SRTopMixLoose",1],
+	["SRTopMerLoose",1],
+	["SRTopResatleast1fjets", 1],
+	["SRTopMixatleast1fjets", 1],
+	["SRTopMeratleast1fjets", 1]
+		      ],
+    
+    "systematics"   : {
+                        "lumi": {
+                            "name": "lumi",
+                            "processes": "",
+                            "bin": "",
+                            "type": "lnN",
+                            "value": {
+                                        "2022":             1.014,
+                                        "2022EE":           1.013,
+                                        "2023":             1.013,
+                                        "2023postBPix":     1.013,
+                                        "2024":             1.016,
+                                        "2022+2023":        1.0101,
+                                        "2023+2024":        1.0141,
+                                        "2022+2023+2024":   1.0120
+                                    }
+                        },
+                        "WJets_norm" : {
+                            "name": "WJets_norm", 
+                            "processes": ["WJets"], 
+                            "bin": ["AH1lWR"] , 
+                            "type": "rateParam", 
+                            "value": 1.0
+                        },
+                        "pileup" : {
+                            "name": "pu", 
+                            "processes": "", 
+                            "bin": ""  , 
+                            "type": "shape", 
+                            "value": 1.0,
+                            "branchRootFile": "pu"
+                        },
+                        "jet_energy_scale" : {
+                            "name": "jesTotal" , 
+                            "processes": "", 
+                            "bin": ""  , 
+                            "type": "shape", 
+                            "value": 1.0,
+                            "branchRootFile": "jesTotal"
+                        },
+                        "jet_energy_resolution" : {
+                            "name": "jer" , 
+                            "processes": "", 
+                            "bin": "", 
+                            "type": "shape", 
+                            "value": 1.0,
+                            "branchRootFile": "jer"
+                        },
+                        "pdf_total": {
+                            "name": "pdf_total",
+                            "processes": "",
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "pdf_total"
+                        },
+                        "QCDScale_TT": {
+                            "name": "QCDScale_TT",
+                            "processes": ["TT"],
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "QCDScale"
+                        },
+                        "QCDScale_TW": {
+                            "name": "QCDScale_TW",
+                            "processes": ["TW"],
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "QCDScale"
+                        },
+                        "QCDScale_QCD": {
+                            "name": "QCDScale_QCD",
+                            "processes": ["QCD"],
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "QCDScale"
+                        },
+                        "QCDScale_WJets": {
+                            "name": "QCDScale_WJets",
+                            "processes": ["WJets"],
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "QCDScale"
+                        },
+                        "QCDScale_ZJets": {
+                            "name": "QCDScale_ZJets",
+                            "processes": ["ZJets"],
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "QCDScale"
+                        },
+                        "ISR": {
+                            "name": "ISR",
+                            "processes": "",
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "ISR"
+                        },
+                        "FSR": {
+                            "name": "FSR",
+                            "processes": "",
+                            "bin": "",
+                            "type": "shape",
+                            "value": 1.0,
+                            "branchRootFile": "FSR"
+                        }
+                    }
+}
