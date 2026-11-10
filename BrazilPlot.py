@@ -7,6 +7,7 @@ import subprocess
 import argparse
 import json
 import sys
+from pathlib import Path
 from utils import unpackLabel
 ROOT.gROOT.SetBatch()
 
@@ -31,7 +32,8 @@ lumi_dict["2022+2023+2024"]         = lumi_dict["2022"] + lumi_dict["2023"] + lu
 
 era                                 = opt.era
 lumi                                = lumi_dict[era]
-outputFolderPath                    = jsoninput["dc-folder"][era]
+outputFolderPath                    = jsoninput["dc-folder"][era]+opt.suffix
+Path(outputFolderPath).mkdir(parents=True, exist_ok=True)
 
 
 suffix= opt.suffix if opt.suffix=="" else "_"+opt.suffix
@@ -154,7 +156,7 @@ CMS.SaveCanvas(canv, f"{outputFolderPath}/limitPlot_{finalmodel}_{era}{suffix}.p
 CMS.SaveCanvas(canv, f"{outputFolderPath}/limitPlot_{finalmodel}_{era}{suffix}.pdf")
 # Save expected limits
 
-with open(f"{outputFolderPath}/expectedLimits.txt", "w") as f:
+with open(f"{outputFolderPath}/expectedLimits{suffix}.txt", "w") as f:
     f.write("mass,expected,expected_16,expected_84,expected_2_5,expected_97_5\n")
     for i in range(len(masses)):
         f.write(str(masses[i])+","+str(y_central[i])+","+str(y1_down[i])+","+str(y1_up[i])+","+str(y2_down[i])+","+str(y2_up[i])+"\n")

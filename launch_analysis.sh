@@ -33,11 +33,5 @@
 #    => This will not re-collect the histograms and NOT modify them, but make the fit to the original plots.
 # Note this will work only if you previously collected the histograms, e.g. if you ran the command in 1)
 ####################################################################################################
-python3 perform-statistical-analysis.py -j settingsOrsoTprimeFull.json -e 2024 -s allregions_wp0p5 -m csmsdlp
-#python3 perform-statistical-analysis.py -j settingsOrsoTprimeFull_reduced.json -e 2024 -s allregions_wp0p5 -m i -v symmetrized_zerosFixed
-#python3 perform-statistical-analysis.py -j settingsOrsoTprime_reduced.json -e 2024 -s allregions -m i -v symmetrized_zerosFixed
-#python3 perform-statistical-analysis.py -j settingsOrsoTprimeFullAltWP_reduced.json -e 2024 -s allregions_altwp -m i -v symmetrized_zerosFixed
-#python3 perform-statistical-analysis.py -j settingsOrsoTprimeFull.json -e 2024 -s  -m csmsdlp
-#python3 perform-statistical-analysis.py -j settingsOrsoTprime.json -e 2024 -s test -m p -v symmetrized_zerosFixed
-
-
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit_reduced.json -e 2024 -s test -m cmdlp 
+python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 -s test_zerosFixed -m p

@@ -6,7 +6,7 @@
                         "2022EE"        : "",
                         "2023"          : "/eos/user/o/oiorio/tDM/MergedSyst/plots/",
                         "2023postBPix"  : "",
-                        "2024"          :  "/eos/user/o/oiorio/tDM/MergedSyst/plots/"
+                        "2024"          :  "/eos/user/f/fscrivan/tDM/postselector_results/2024/plots_new/plots"
                         },
                         
     "dc-folder"     : {
@@ -14,7 +14,7 @@
                         "2022EE"            : "",
                         "2023"              : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2023/AHTight_SRTopLoose_AH0lZR_AH1lWR/",
                         "2023postBPix"      : "",
-                        "2024"              : "/eos/user/o/oiorio/tDM/stats/2024/",
+                        "2024"              : "/eos/user/f/fscrivan/tDM/stats/2024/",
                         "2022+2023"         : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2022+2023/",
                         "2023+2024"         : "",
                         "2022+2023+2024"    : ""
@@ -29,8 +29,8 @@
                         },
 
     "processes"     : { 
-        "backgrounds": ["TT", "TW", "ZJets","QCD"],
-        "signals": ["TBDM_s_mPhi10_mChi1","TBDM_s_mPhi50_mChi1","TBDM_s_mPhi200_mChi1","TBDM_s_mPhi300_mChi1","TBDM_s_mPhi500_mChi1","TBDM_s_mPhi1000_mChi1"]
+        "backgrounds": ["TT", "TW", "ZJets", "WJets", "QCD"],
+        "signals": ["TBDM_s_mPhi10_mChi1","TBDM_s_mPhi50_mChi1", "TBDM_s_mPhi150_mChi1", "TBDM_s_mPhi200_mChi1", "TBDM_s_mPhi250_mChi1", "TBDM_s_mPhi300_mChi1", "TBDM_s_mPhi350_mChi1", "TBDM_s_mPhi400_mChi1", "TBDM_s_mPhi500_mChi1", "TBDM_s_mPhi600_mChi1", "TBDM_s_mPhi700_mChi1", "TBDM_s_mPhi800_mChi1", "TBDM_s_mPhi1000_mChi1"]
                         },
 
     "samples"       : {
@@ -39,22 +39,31 @@
                         "TW"                : "TW",
                         "ZJets"             : "ZJetsToNuNu_2jets",
                         "QCD"               : "QCD",
-        "TBDM_s_mPhi10_mChi1"   : "TBDM_s_mPhi10_mChi1",
+                        "WJets"             : "WJets_2jets",
+    "TBDM_s_mPhi10_mChi1"   : "TBDM_s_mPhi10_mChi1",
 	"TBDM_s_mPhi50_mChi1"   : "TBDM_s_mPhi50_mChi1",
 	"TBDM_s_mPhi100_mChi1"   : "TBDM_s_mPhi100_mChi1",
+    "TBDM_s_mPhi150_mChi1"   : "TBDM_s_mPhi150_mChi1",
 	"TBDM_s_mPhi200_mChi1"   : "TBDM_s_mPhi200_mChi1",
+    "TBDM_s_mPhi250_mChi1"   : "TBDM_s_mPhi250_mChi1",
 	"TBDM_s_mPhi300_mChi1"   : "TBDM_s_mPhi300_mChi1",
+    "TBDM_s_mPhi350_mChi1"   : "TBDM_s_mPhi350_mChi1",
+    "TBDM_s_mPhi400_mChi1"   : "TBDM_s_mPhi400_mChi1",
 	"TBDM_s_mPhi500_mChi1"   : "TBDM_s_mPhi500_mChi1",
+    "TBDM_s_mPhi600_mChi1"   : "TBDM_s_mPhi600_mChi1",
+    "TBDM_s_mPhi700_mChi1"   : "TBDM_s_mPhi700_mChi1",
+    "TBDM_s_mPhi800_mChi1"   : "TBDM_s_mPhi800_mChi1",
 	"TBDM_s_mPhi1000_mChi1"   : "TBDM_s_mPhi1000_mChi1"
                         },
 
-    "categories"    : [
-	["SRTopMixLoose",1],
-	["SRTopMerLoose",1],
-	["SRTopResatleast1fjets", 1],
-	["SRTopMixatleast1fjets", 1],
-	["SRTopMeratleast1fjets", 1]
-		      ],
+    "categories": [
+        ["SRTopResLoose_tight_lepVeto", 1],
+        ["SRTopMixLoose_tight_lepVeto", 1],
+        ["SRTopMerLoose_tight_lepVeto", 1],
+        ["SRTopResatleast1fjets_tight_lepVeto", 1],
+        ["SRTopMixatleast1fjets_tight_lepVeto", 1],
+        ["SRTopMeratleast1fjets_tight_lepVeto", 1]
+    ],
     
     "systematics"   : {
                         "lumi": {
