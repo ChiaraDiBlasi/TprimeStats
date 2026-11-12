@@ -14,7 +14,7 @@
                         "2022EE"            : "",
                         "2023"              : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2023/AHTight_SRTopLoose_AH0lZR_AH1lWR/",
                         "2023postBPix"      : "",
-                        "2024"              : "/eos/user/f/fscrivan/tDM/stats/2024/",
+                        "2024": "/eos/user/f/fscrivan/tDM/stats/2024/",
                         "2022+2023"         : "/eos/user/l/lfavilla/RDF_DManalysis/stats/2022+2023/",
                         "2023+2024"         : "",
                         "2022+2023+2024"    : ""
@@ -56,13 +56,22 @@
 	"TBDM_s_mPhi1000_mChi1"   : "TBDM_s_mPhi1000_mChi1"
                         },
 
+    
+                            
     "categories": [
-        ["SRTopResLoose_tight_lepVeto", 1],
-        ["SRTopMixLoose_tight_lepVeto", 1],
-        ["SRTopMerLoose_tight_lepVeto", 1],
+        ["SRTopRes0fjets_tight_lepVeto", 1],
+        ["SRTopMix0fjets_tight_lepVeto", 1],
+        ["SRTopMer0fjets_tight_lepVeto", 1],
         ["SRTopResatleast1fjets_tight_lepVeto", 1],
         ["SRTopMixatleast1fjets_tight_lepVeto", 1],
-        ["SRTopMeratleast1fjets_tight_lepVeto", 1]
+        ["SRTopMeratleast1fjets_tight_lepVeto", 1],
+
+        ["SRTop0fjetsResLoose_tight_lepVeto", 1],
+        ["SRTop0fjetsMixLoose_tight_lepVeto", 1],
+        ["SRTop0fjetsMerLoose_tight_lepVeto", 1],
+        ["SRTopatleast1fjetsResLoose_tight_lepVeto", 1],
+        ["SRTopatleast1fjetsMixLoose_tight_lepVeto", 1],
+        ["SRTopatleast1fjetsMerLoose_tight_lepVeto", 1]
     ],
     
     "systematics"   : {

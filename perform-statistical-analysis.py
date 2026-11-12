@@ -15,6 +15,7 @@ parser.add_argument('-m', '--mode',       type=str,               default='csmdl
 parser.add_argument('--dryrun',       action="store_true", default=False,                 help='just get run the commands file without executing them')
 parser.add_argument('--verbose',       type=int,               default=0,                 help='Verbosity level')
 parser.add_argument('-v', '--variant',       type=str,               default='',                 help='Suffix labelling the variant at datacard level)')
+parser.add_argument("--folder", type=str, required=True, help="Nome della cartella dell'analisi")
 args = parser.parse_args()
 
 
@@ -34,7 +35,8 @@ with open(args.jsonInput) as file:
     print("Opening JSON file {}".format(args.jsonInput))
     jsoninput   = json.load(file)
 
-output_dir      = jsoninput["dc-folder"][era].rstrip("/")
+output_dir = os.path.join(jsoninput["dc-folder"][era], args.folder)
+jsoninput["dc-folder"][era] = output_dir
 massPoints      = [ unpackLabel(signal,verbose)[0] for signal in jsoninput["processes"]["signals"]]
 
 
@@ -43,7 +45,8 @@ massPoints      = [ unpackLabel(signal,verbose)[0] for signal in jsoninput["proc
 os.makedirs(output_dir, exist_ok=True)
 settings_file   = f"{output_dir}/settings{f'_{suffix}' if suffix else ''}.json"
 commands_file   = f"{output_dir}/commands{f'_{suffix}' if suffix else ''}.sh"
-shutil.copy(args.jsonInput, settings_file)
+with open(settings_file, "w") as f:
+    json.dump(jsoninput, f, indent=4)
 with open(commands_file, "w") as f:
     f.write(f"cd {os.getcwd()}\n")
 

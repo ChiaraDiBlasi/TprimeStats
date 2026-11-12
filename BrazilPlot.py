@@ -25,14 +25,14 @@ with open(opt.jsonInput) as file:
     print("Opening JSON file {}".format(opt.jsonInput))
     jsoninput   = json.load(file)
 lumi_dict                           = jsoninput["lumi_dict"]
-lumi_dict["2022+2023"]              = lumi_dict["2022"] + lumi_dict["2023"]
-lumi_dict["2022+2023+2024"]         = lumi_dict["2022"] + lumi_dict["2023"] + lumi_dict["2024"]
+#lumi_dict["2022+2023"]              = lumi_dict["2022"] + lumi_dict["2023"]
+#lumi_dict["2022+2023+2024"]         = lumi_dict["2022"] + lumi_dict["2023"] + lumi_dict["2024"]
 
 
 
 era                                 = opt.era
 lumi                                = lumi_dict[era]
-outputFolderPath                    = jsoninput["dc-folder"][era]+opt.suffix
+outputFolderPath                    = jsoninput["dc-folder"][era]
 Path(outputFolderPath).mkdir(parents=True, exist_ok=True)
 
 
@@ -40,7 +40,7 @@ suffix= opt.suffix if opt.suffix=="" else "_"+opt.suffix
 blindlabel= "_obs_" if opt.unblind else "" 
 namejson="Limits_"+era+blindlabel+suffix+".json"#take the same naming convention of the runlimits for the suffix/era/unblind if nothing specified
 
-limitInputName = f"{outputFolderPath}/{namejson}" if opt.limitInput=="" else opt.limitInput
+limitInputName = f"{jsoninput['dc-folder'][era].rstrip('/')}/{namejson}" if opt.limitInput=="" else opt.limitInput
 with open(limitInputName) as file:
     limitInput = json.load(file)
 
@@ -104,8 +104,14 @@ thw5  = ROOT.TGraph(len(x), array('d',x),  array('d',[0.3877, 0.20453, 0.113759,
 
 if("TBDM" in finalmodel):
     masses_observedFullRun2 = [0.01,  0.05,   0.1,    0.15,    0.2,     0.25,    0.3,     0.35,    0.4,     0.45,     0.5,     1.0 ]
-    y_expectedFullRun2      = [2.779, 0.7454, 0.2848, 0.1388,  0.07662, 0.04614, 0.02958, 0.01957, 0.01141, 0.006877, 0.004427,0.0002494]
-    exprun2                 = ROOT.TGraph(len(masses_observedFullRun2), array('d',masses_observedFullRun2),  array('d',y_expectedFullRun2))
+    #y_expectedFullRun2      = [2.779, 0.7454, 0.2848, 0.1388,  0.07662, 0.04614, 0.02958, 0.01957, 0.01141, 0.006877, 0.004427,0.0002494]
+    theory_cross_sections = [2.779, 0.7454, 0.2848, 0.1388, 0.07662, 0.04614, 0.02958, 0.01957, 0.01141, 0.006877, 0.004427, 0.0002494]
+    th = ROOT.TGraph(
+        len(masses_observedFullRun2),
+        array('d', masses_observedFullRun2),
+        array('d', theory_cross_sections),
+    )
+    #exprun2                 = ROOT.TGraph(len(masses_observedFullRun2), array('d',masses_observedFullRun2),  array('d',y_expectedFullRun2))
     
     #print(finalmodel)
 if("TprimeToTZNW" in finalmodel):
@@ -139,18 +145,19 @@ CMS.cmsDraw(ge2, "3L", fcolor = ROOT.TColor.GetColor("#F5BB54"))
 CMS.cmsDraw(ge, "3", fcolor = ROOT.TColor.GetColor("#607641"))
 CMS.cmsDraw(g, "L", lstyle=ROOT.kDashed)
 CMS.cmsDraw(th, "L", lcolor = ROOT.TColor.GetColor("#bd1f01"), lwidth=2)
-CMS.cmsDraw(exprun2, "L", lcolor = ROOT.TColor.GetColor("#964a8b"), lwidth=2)
+#CMS.cmsDraw(exprun2, "L", lcolor = ROOT.TColor.GetColor("#964a8b"), lwidth=2)
 #CMS.cmsDraw(obsrun2, "L", lcolor = ROOT.TColor.GetColor("#964a8b"), lwidth=2)
 #MS.cmsDraw(exprun2, "L", lcolor = ROOT.TColor.GetColor("#964a8b"), lwidth=2, lstyle=ROOT.kDashed)
 
 canv.SetLogy()
 leg = CMS.cmsLeg(0.50, 0.60, 0.94, 0.90, textSize=0.026)
-leg.AddEntry(g, "expected","L")
+if "TprimeToTZNW" in finalmodel:
+    leg.AddEntry(exprun2, "expected Full Run 2", "L")
 leg.AddEntry(ge, "68% expected","F")
 leg.AddEntry(ge2, "95% expected","F")
 leg.AddEntry(th, "#sigma(NLO), Singlet T, #Gamma/m_{T}<0.01","L")
 #leg.AddEntry(obsrun2, "observed Full Run 2","L")
-leg.AddEntry(exprun2, "expected Full Run 2","L")
+#leg.AddEntry(exprun2, "expected Full Run 2","L")
 CMS.CMS_lumi(canv, iPos)
 CMS.SaveCanvas(canv, f"{outputFolderPath}/limitPlot_{finalmodel}_{era}{suffix}.png", False)
 CMS.SaveCanvas(canv, f"{outputFolderPath}/limitPlot_{finalmodel}_{era}{suffix}.pdf")

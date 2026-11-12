@@ -34,4 +34,12 @@
 # Note this will work only if you previously collected the histograms, e.g. if you ran the command in 1)
 ####################################################################################################
 #python3 perform-statistical-analysis.py -j settingsOrsoNominalFit_reduced.json -e 2024 -s test -m cmdlp 
-python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 -s test_zerosFixed -m p
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 -s TOPXT_loose_lepVeto_zerosFixed -m i
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPXT_tight_lepVeto -s TOPXT_tight_lepVeto_zerosFixed -m i
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPtightNotXT_loose_lepVeto -s TOPtightNotXT_loose_lepVeto_zerosFixed -m dlp
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPlooseNotTight_loose_lepVeto -s TOPlooseNotTight_loose_lepVeto_zerosFixed -m i
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPlooseNotTight_tight_lepVeto -s TOPlooseNotTight_tight_lepVeto_zerosFixed -m dlp
+
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPXT_TNotXT_LNotT_tight_lepVeto -s TOPXT_TNotXT_LNotT_tight_lepVeto_zerosFixed -m dlp
+#python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPXT_TNotXT_tight_lepVeto -s TOPXT_TNotXT_tight_lepVet_zerosfixed -m dlp
+python3 perform-statistical-analysis.py -j settingsOrsoNominalFit.json -e 2024 --folder TOPT_LNotT_tight_lepVeto_old -s TOPT_LNotT_tight_lepVeto_old_zerosFixed_zerosFixed -m dlp
