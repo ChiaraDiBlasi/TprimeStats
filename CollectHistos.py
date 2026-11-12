@@ -53,6 +53,8 @@ def CollectHistos(inputEosFolder, outFolderPath, jsonInput, era, unblind=False, 
 
     os.makedirs(outFolderPath, exist_ok=True)
     output              = ROOT.TFile(outFilePath, "RECREATE")
+    if not output or output.IsZombie() or not output.IsWritable():
+        raise RuntimeError(f"Cannot create output ROOT file {outFilePath}")
     xbins               = array("d", [500, 600, 700, 800, 1000, 1400, 2000])
     nominalHistos       = {}
     componentIntegrals  = {}
@@ -71,8 +73,13 @@ def CollectHistos(inputEosFolder, outFolderPath, jsonInput, era, unblind=False, 
                 summaryInfo[outputName]         = (region, outputSyst, process)
                 for i, f in enumerate(processFileList):
                     inputFile                   = ROOT.TFile.Open(f"{inputEosFolder}/{f}")
+                    if not inputFile or inputFile.IsZombie():
+                        raise RuntimeError(f"Cannot open input ROOT file {inputEosFolder}/{f}")
                     print(process, region, inputName, f)
                     tmp                         = inputFile.Get(inputName)
+                    if not tmp:
+                        inputFile.Close()
+                        raise RuntimeError(f"Histogram {inputName} not found in {inputEosFolder}/{f}")
                     tmp                         = tmp.Clone(f"{outputName}_source{i}")
                     tmp.SetDirectory(0)
                     inputFile.Close()
@@ -88,7 +95,8 @@ def CollectHistos(inputEosFolder, outFolderPath, jsonInput, era, unblind=False, 
                         h_out.Add(tmp)
                 output.cd()
                 print(f"Wrote {outputName}: integral={h_out.Integral():.6f}")
-                h_out.Write()
+                if h_out.Write() <= 0:
+                    raise RuntimeError(f"Failed to write {outputName} to {outFilePath}")
                 if inputSyst == "nominal":
                     nominalHistos[(process, region)] = h_out.Clone()
                 nominalHistos[(process, region)].SetDirectory(0)
@@ -125,13 +133,16 @@ def CollectHistos(inputEosFolder, outFolderPath, jsonInput, era, unblind=False, 
                 inputName = f"hist_{process}_{region}_nominal"
                 componentIntegrals[outputName] += [(f"{process}: {f}", integral) for f, integral in componentIntegrals[inputName]]
         output.cd()
-        h_out.Write()
+        if h_out.Write() <= 0:
+            raise RuntimeError(f"Failed to write {outputName} to {outFilePath}")
 
-    output.Close()
-    output                  = ROOT.TFile.Open(outFilePath, "READ")
+    # Validate the serialized histograms through the writer's directory. An
+    # immediate reopen through EOS/FUSE can expose stale file metadata.
+    output.Flush()
     validationErrors        = 0
     for outputName, components in componentIntegrals.items():
-        histogram           = output.Get(outputName)
+        key                 = output.GetKey(outputName)
+        histogram           = key.ReadObj() if key else None
         if not histogram:
             print(f"ERROR {outputName}: histogram is missing from the output file")
             validationErrors += 1
